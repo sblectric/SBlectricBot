@@ -1,0 +1,12 @@
+/db
+/bin
+/jar
+/api
+/.settings
+/.classpath
+.project
+.project.swp
+.metadata*
+*.py
+*.7z
+*.class
