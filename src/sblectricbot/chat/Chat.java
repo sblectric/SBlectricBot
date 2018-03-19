@@ -79,6 +79,7 @@ public class Chat {
 	
 	/** Quick way to query for the broadcaster */
 	public static boolean isBroadcaster(String channel, User user) {
+		if(user == null) return false;
 		return channel.substring(1).equals(user.getNick());
 	}
 	

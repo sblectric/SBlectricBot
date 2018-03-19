@@ -1,0 +1,9 @@
+v0.1.2
+> Fixed command cooldown (global instead of per-user)
+> Fixed a new console input crash condition
+
+v0.1.1
++ Added command cooldown features
++ Added meme OoB condition
++ Added meme searching functionality
+> Fixed possible console input crash

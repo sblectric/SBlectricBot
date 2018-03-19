@@ -64,7 +64,7 @@ public class ChatListener extends ListenerAdapter {
 		
 		// add default viewer commands
 		Command meme = new CommandParam("!meme", new Meme(), PermissionLevel.VIEWER).setDefault();
-		chatCommands.addCommand(meme); chatCommands.setCommandTimeout(meme, 20000); // !meme has 20s cooldown by default
+		chatCommands.addCommand(meme); chatCommands.setCommandCooldown(meme, 20000); // !meme has 20s cooldown by default
 		
 		// load custom commands from disk
 		System.out.println("Loading commands from disk...");

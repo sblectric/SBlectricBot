@@ -15,14 +15,19 @@ public class CommandList {
 	
 	/** The list of commands */
 	private List<Command> commands = new LinkedList<Command>();
-	private Map<Command, Long> cmdTimeoutMap = new HashMap<Command, Long>();
-	private Map<String, Long> userTimeoutTracker = new HashMap<String, Long>();
+	private Map<Command, Long> cmdCooldownMap = new HashMap<Command, Long>();
+	private Map<Command, Long> cmdCooldownTrackerMap = new HashMap<Command, Long>();
 	
 	private static final long defaultTimeout = 5000; // 5s default timeout
 	
-	/** Set a command timeout to a non-default value */
-	public void setCommandTimeout(Command cmd, long timeout) {
-		cmdTimeoutMap.put(cmd, timeout);
+	/** Set a command cooldown to a non-default value */
+	public void setCommandCooldown(Command cmd, long timeout) {
+		cmdCooldownMap.put(cmd, timeout);
+	}
+	
+	/** Gets the cooldown for the specified command */
+	public long getCommandCooldown(Command cmd) {
+		return cmdCooldownMap.containsKey(cmd) ? cmdCooldownMap.get(cmd) : defaultTimeout;
 	}
 	
 	/** Add a command to the command list */
@@ -68,19 +73,20 @@ public class CommandList {
 	public boolean runCommandByName(User user, String command, String param) {
 		Command c = getCommandByName(command);
 		if(c != null) {
-			String key = user + ":" + command;
 			long time = System.currentTimeMillis();
-			long timeout = cmdTimeoutMap.containsKey(command) ? cmdTimeoutMap.get(command) : defaultTimeout;
-			if(Chat.isBroadcaster(user) || 
-					!userTimeoutTracker.containsKey(key) || 
-					time - userTimeoutTracker.get(key) >= timeout) { // check timeout conditions
+			long cooldown = this.getCommandCooldown(c);
+			
+			// check cooldown conditions
+			boolean cooldownPassed = (!cmdCooldownTrackerMap.containsKey(c)) || (time - cmdCooldownTrackerMap.get(c) >= cooldown);
+			if(user == null || Chat.isBroadcaster(user) || cooldownPassed) {
 				if(c instanceof CommandParam) {
 					((CommandParam)c).runTask(user, param);
 				} else {
 					c.runTask(user);
 				}
-				if(!Chat.isBroadcaster(user)) userTimeoutTracker.put(key, time);
+				if(user != null) cmdCooldownTrackerMap.put(c, time);
 			}
+			
 			return true;
 		} else {
 			return false;
