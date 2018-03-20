@@ -18,16 +18,16 @@ public class CommandList {
 	private Map<Command, Long> cmdCooldownMap = new HashMap<Command, Long>();
 	private Map<Command, Long> cmdCooldownTrackerMap = new HashMap<Command, Long>();
 	
-	private static final long defaultTimeout = 5000; // 5s default timeout
+	private static final long defaultCooldown = 5000; // 5s default timeout
 	
 	/** Set a command cooldown to a non-default value */
-	public void setCommandCooldown(Command cmd, long timeout) {
-		cmdCooldownMap.put(cmd, timeout);
+	public void setCommandCooldown(Command cmd, long cooldown) {
+		cmdCooldownMap.put(cmd, cooldown);
 	}
 	
 	/** Gets the cooldown for the specified command */
 	public long getCommandCooldown(Command cmd) {
-		return cmdCooldownMap.containsKey(cmd) ? cmdCooldownMap.get(cmd) : defaultTimeout;
+		return cmdCooldownMap.containsKey(cmd) ? cmdCooldownMap.get(cmd) : defaultCooldown;
 	}
 	
 	/** Add a command to the command list */
@@ -79,11 +79,7 @@ public class CommandList {
 			// check cooldown conditions
 			boolean cooldownPassed = (!cmdCooldownTrackerMap.containsKey(c)) || (time - cmdCooldownTrackerMap.get(c) >= cooldown);
 			if(user == null || Chat.isBroadcaster(user) || cooldownPassed) {
-				if(c instanceof CommandParam) {
-					((CommandParam)c).runTask(user, param);
-				} else {
-					c.runTask(user);
-				}
+				runCommand(user, c, param);
 				if(user != null) cmdCooldownTrackerMap.put(c, time);
 			}
 			

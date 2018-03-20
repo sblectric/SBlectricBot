@@ -2,6 +2,7 @@ package sblectricbot.init;
 
 import sblectricbot.SBlectricBot;
 import sblectricbot.io.BotData;
+import sblectricbot.ref.RefStrings;
 
 /** Bot initialization class */
 public class InitBot {

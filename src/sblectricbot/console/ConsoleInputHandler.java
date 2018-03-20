@@ -6,8 +6,8 @@ import sblectricbot.SBlectricBot;
 import sblectricbot.command.Command;
 import sblectricbot.command.CommandList;
 import sblectricbot.command.CommandTimer;
-import sblectricbot.init.RefStrings;
 import sblectricbot.io.BotData;
+import sblectricbot.ref.RefStrings;
 import sblectricbot.util.Utils;
 
 /** Handle console input */

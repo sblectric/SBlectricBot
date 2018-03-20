@@ -16,6 +16,7 @@ import sblectricbot.command.CommandParam.RunnableParam;
 import sblectricbot.command.CommandTimer;
 import sblectricbot.io.BotData;
 import sblectricbot.io.TxtFileIO;
+import sblectricbot.ref.RefStrings;
 import sblectricbot.util.PermissionLevel;
 import sblectricbot.util.Utils;
 
@@ -44,8 +45,10 @@ public class ChatListener extends ListenerAdapter {
 		
 		chatCommands = new CommandList();
 		
-		// add default broadcaster commands
+		// command list command
 		chatCommands.addCommand(new Command("!commandlist", ()->listCommands()).setDefault());
+		
+		// add default broadcaster commands
 		chatCommands.addCommand(new CommandParam("!newcommandb", new CommandAdder(PermissionLevel.BROADCASTER), PermissionLevel.BROADCASTER).setDefault());
 		chatCommands.addCommand(new CommandParam("!newcommandm", new CommandAdder(PermissionLevel.MODERATOR), PermissionLevel.BROADCASTER).setDefault());
 		chatCommands.addCommand(new CommandParam("!newcommand", new CommandAdder(PermissionLevel.VIEWER), PermissionLevel.BROADCASTER).setDefault());
@@ -63,6 +66,7 @@ public class ChatListener extends ListenerAdapter {
 		chatCommands.addCommand(new CommandParam("!shoutout", new Shoutout(), PermissionLevel.MODERATOR).setDefault());
 		
 		// add default viewer commands
+		chatCommands.addCommand(new Command("!github", new RunnableChat(RefStrings.NAME + " GitHub page: " + RefStrings.GITHUB)).setDefault());
 		Command meme = new CommandParam("!meme", new Meme(), PermissionLevel.VIEWER).setDefault();
 		chatCommands.addCommand(meme); chatCommands.setCommandCooldown(meme, 20000); // !meme has 20s cooldown by default
 		
@@ -298,6 +302,16 @@ public class ChatListener extends ListenerAdapter {
 		public void outputCount() {
 			Chat.sendMessage("There are " + memes.size() + " memes available for your shitposting pleasure.");
 		}
+		
+		/** Gets a specified meme by its index, including the index at the start */
+		private String getMeme(int index) {
+			return "#" + index + ". " + memes.get(index - 1);
+		}
+		
+		/** Output the specified meme to the chat */
+		private void sendMeme(int index) {
+			Chat.sendMessage(getMeme(index));
+		}
 
 		@Override
 		public void run(String param) {
@@ -307,15 +321,16 @@ public class ChatListener extends ListenerAdapter {
 				index = Integer.parseInt(param);
 			} catch(Exception e) {}
 			
-			if(index >= 1 && index < memes.size() + 1) {
-				Chat.sendMessage(memes.get(index - 1));
+			if(index >= 1 && index <= memes.size()) {
+				sendMeme(index);
 			} else {
 				if(index == NaN) { // not a number, use meme search feature and fall back to random meme
-					String toSend = memes.get(rng.nextInt(memes.size()));
+					String toSend = getMeme(1 + rng.nextInt(memes.size()));
 					if(!param.equals("")) {
-						for(String meme : memes) {
+						for(int i = 1; i <= memes.size(); i++) {
+							String meme = memes.get(i - 1);
 							if(meme.toLowerCase().contains(param.toLowerCase())) {
-								toSend = meme;
+								toSend = getMeme(i);
 								break;
 							}
 						}

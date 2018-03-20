@@ -6,8 +6,8 @@ import sblectricbot.chat.TimedChat;
 import sblectricbot.command.CommandList;
 import sblectricbot.console.ConsoleInputHandler;
 import sblectricbot.init.InitBot;
-import sblectricbot.init.RefStrings;
 import sblectricbot.io.BotData.TimerData;
+import sblectricbot.ref.RefStrings;
 import sblectricbot.io.TxtFileIO;
 import sblectricbot.util.Utils;
 
