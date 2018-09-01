@@ -13,7 +13,7 @@ import org.json.JSONTokener;
 import org.json.JSONWriter;
 
 import sblectricbot.SBlectricBot;
-import sblectricbot.chat.RunnableChat;
+import sblectricbot.chat.cmd.RunnableChat;
 import sblectricbot.command.Command;
 import sblectricbot.command.CommandMutable;
 import sblectricbot.command.CommandTimer;

@@ -10,12 +10,12 @@ import sblectricbot.io.BotData.TimerData;
 import sblectricbot.util.Utils;
 
 /** Timed chat commands get processed here */
-public class TimedChat {
+public class TimedChatHandler {
 	
 	public TimerData timerData;
 	private boolean canAccessList = true;
 	
-	public TimedChat() {
+	public TimedChatHandler() {
 		initTimers();
 	}
 	
@@ -60,7 +60,7 @@ public class TimedChat {
 	}
 	
 	/** Add a timer to the timers */
-	public TimedChat addTimer(CommandTimer t) {
+	public TimedChatHandler addTimer(CommandTimer t) {
 		Utils.whileTimeout(()->!canAccess()); // wait for unsafe conditions to pass
 		timerData.timers.add(t);
 		return this;

@@ -1,14 +1,17 @@
 package sblectricbot;
 
+import java.util.Random;
+
 import me.tyler.twitchbot.TwitchBot;
+import sblectricbot.api.Twitch_API;
 import sblectricbot.chat.ChatListener;
-import sblectricbot.chat.TimedChat;
+import sblectricbot.chat.TimedChatHandler;
 import sblectricbot.command.CommandList;
 import sblectricbot.console.ConsoleInputHandler;
 import sblectricbot.init.InitBot;
 import sblectricbot.io.BotData.TimerData;
-import sblectricbot.ref.RefStrings;
 import sblectricbot.io.TxtFileIO;
+import sblectricbot.ref.RefStrings;
 import sblectricbot.util.Utils;
 
 /** The main bot class */
@@ -20,7 +23,13 @@ public class SBlectricBot {
 	public static final String username = new TxtFileIO().readFromFileLowerCase(usernameFile = "./db/username.txt");
 	public static final String auth = new TxtFileIO().readFromFileLowerCase(authFile = "./db/oauth.txt");
 	public static final String channelName = new TxtFileIO().readFromFileLowerCase(channelNameFile = "./db/channel.txt");
+	public static final String clientID = Twitch_API.getClientID(auth);
+	
+	// the bot core
 	public static TwitchBot botCore;
+	
+	// global random number generator
+	public static Random rng = new Random();
 	
 	// output bot details before startup
 	static { InitBot.startup(); }
@@ -28,7 +37,7 @@ public class SBlectricBot {
 	// prepare the threads
 	public static final ConsoleInputHandler console = new ConsoleInputHandler();
 	public static final ChatListener listener = new ChatListener();
-	public static final TimedChat timers = new TimedChat();
+	public static final TimedChatHandler timers = new TimedChatHandler();
 	
 	/** Main method */
 	public static void main(String[] args) {
@@ -80,7 +89,7 @@ public class SBlectricBot {
 	
 	/** Get the chat command list */
 	public static CommandList getChatCommands() {
-		return listener.chatCommands;
+		return listener.cmds;
 	}
 	
 	/** Get the chat command timer data */

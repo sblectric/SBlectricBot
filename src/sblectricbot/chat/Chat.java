@@ -1,17 +1,15 @@
 package sblectricbot.chat;
 
-import java.io.InputStream;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.pircbotx.User;
 
 import sblectricbot.SBlectricBot;
 import sblectricbot.util.PermissionLevel;
+import sblectricbot.util.Utils;
 
 /** Useful functions for chat */
 public class Chat {
@@ -44,10 +42,8 @@ public class Chat {
 				
 				// see if the user is a mod
 				try {
-					URI uri = new URI("http://tmi.twitch.tv/group/user/" + channel.substring(1) + "/chatters");
-					InputStream input = uri.toURL().openStream();
-					JSONTokener tokener = new JSONTokener(input);
-					JSONObject json = new JSONObject(tokener);
+					JSONObject json = Utils.getJSONFromWeb("http://tmi.twitch.tv/group/user/" + 
+												channel.substring(1) + "/chatters");
 					JSONObject chatters = json.getJSONObject("chatters");
 					JSONArray mods = chatters.getJSONArray("moderators");
 					for(int i = 0; i < mods.length(); i++) {
@@ -55,7 +51,6 @@ public class Chat {
 							return addPermissionToCache(key, PermissionLevel.MODERATOR);
 						}
 					}
-					input.close();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}

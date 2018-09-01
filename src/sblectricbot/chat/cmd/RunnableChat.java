@@ -1,5 +1,6 @@
-package sblectricbot.chat;
+package sblectricbot.chat.cmd;
 
+import sblectricbot.chat.Chat;
 import sblectricbot.util.IMessageSerializable;
 
 /** Display a chat message as Runnable */
