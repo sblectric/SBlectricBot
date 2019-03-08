@@ -1,5 +1,6 @@
 package sblectricbot;
 
+import java.util.List;
 import java.util.Random;
 
 import me.tyler.twitchbot.TwitchBot;
@@ -19,10 +20,17 @@ public class SBlectricBot {
 	
 	// create the directory (if it doesn't exist) and load some data
 	static { new TxtFileIO().createDirIfNeeded("./db"); }
-	private static final String usernameFile, authFile, channelNameFile;
+	
+	// core fileset
+	private static final String usernameFile, authFile, channelNameFile, webLinkFile;
 	public static final String username = new TxtFileIO().readFromFileLowerCase(usernameFile = "./db/username.txt");
 	public static final String auth = new TxtFileIO().readFromFileLowerCase(authFile = "./db/oauth.txt");
 	public static final String channelName = new TxtFileIO().readFromFileLowerCase(channelNameFile = "./db/channel.txt");
+	
+	// weblink feature
+	public static final List<String> webLink = new TxtFileIO().readAllLines(webLinkFile = "./db/weblink.txt");
+	
+	// client ID
 	public static final String clientID = Twitch_API.getClientID(auth);
 	
 	// the bot core
@@ -58,6 +66,12 @@ public class SBlectricBot {
 			System.out.println("Before you can use " + RefStrings.NAME + ", you need to create the file '" + channelNameFile + 
 					"', with the only contents being the channel name the bot should connect to (#<your name> usually).");
 			canUse = false;
+		}
+		if(webLinkFile.equals(TxtFileIO.ERROR)) {
+			System.out.println("Before you can use weblink features, you need to create the file '" + webLinkFile + 
+					"', with the first line being " + 
+					"<path to your web server directory to save HTML files> and the second line being " + 
+					"<the URL corresponding to that path>");
 		}
 		if(!canUse) {
 			System.out.println("Bot aborted.");

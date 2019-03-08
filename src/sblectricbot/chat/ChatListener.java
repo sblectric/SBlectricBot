@@ -10,9 +10,11 @@ import sblectricbot.SBlectricBot;
 import sblectricbot.api.SRC_API.SRCType;
 import sblectricbot.chat.cmd.CommandAdder;
 import sblectricbot.chat.cmd.CommandRemover;
+import sblectricbot.chat.cmd.CommandTable;
 import sblectricbot.chat.cmd.Meme;
 import sblectricbot.chat.cmd.MemeAdder;
 import sblectricbot.chat.cmd.MemeRemover;
+import sblectricbot.chat.cmd.MemeTable;
 import sblectricbot.chat.cmd.MentionReloader;
 import sblectricbot.chat.cmd.RunnableChat;
 import sblectricbot.chat.cmd.SRC;
@@ -53,9 +55,6 @@ public class ChatListener extends ListenerAdapter {
 		
 		cmds = new CommandList();
 		
-		// command list command
-		cmds.addCommand(new Command("!commandlist", ()->listCommands()).setDefault());
-		
 		// add default broadcaster commands
 		cmds.addCommand(new CommandParam("!newcommandb", new CommandAdder(PermissionLevel.BROADCASTER, cmds), PermissionLevel.BROADCASTER).setDefault());
 		cmds.addCommand(new CommandParam("!newcommandm", new CommandAdder(PermissionLevel.MODERATOR, cmds), PermissionLevel.BROADCASTER).setDefault());
@@ -69,7 +68,9 @@ public class ChatListener extends ListenerAdapter {
 		
 		// add default moderator commands
 		cmds.addCommand(new CommandParam("!newmeme", new MemeAdder(memes), PermissionLevel.MODERATOR).setDefault());
+		cmds.addCommand(new CommandParam("!addmeme", new MemeAdder(memes), PermissionLevel.MODERATOR).setDefault());
 		cmds.addCommand(new CommandParam("!remmeme", new MemeRemover(memes), PermissionLevel.MODERATOR).setDefault());
+		cmds.addCommand(new CommandParam("!delmeme", new MemeRemover(memes), PermissionLevel.MODERATOR).setDefault());
 		cmds.addCommand(new CommandParam("!memecount", ()->new Meme(memes).outputCount(), PermissionLevel.MODERATOR).setDefault());
 		cmds.addCommand(new CommandParam("!shoutout", new Shoutout(), PermissionLevel.MODERATOR).setDefault());
 		
@@ -77,6 +78,10 @@ public class ChatListener extends ListenerAdapter {
 		cmds.addCommand(new Command("!github", new RunnableChat(RefStrings.NAME + " GitHub page: " + RefStrings.GITHUB)).setDefault());
 		Command meme = new CommandParam("!meme", new Meme(memes), PermissionLevel.VIEWER).setDefault();
 		cmds.addCommand(meme); cmds.setCommandCooldown(meme, 20000); // !meme has 20s cooldown by default
+		
+		// weblink commands
+		cmds.addCommand(new Command("!commandlist", new CommandTable(cmds)).setDefault());
+		cmds.addCommand(new Command("!memelist", new MemeTable(memes)).setDefault());
 		
 		// add default twitch API commands
 		cmds.addCommand(new Command("!uptime", new TwitchUptime(), PermissionLevel.VIEWER).setDefault());
@@ -139,7 +144,7 @@ public class ChatListener extends ListenerAdapter {
 		}
 	}
 	
-	/** List the commands */
+	/** List the commands (deprecated) */
 	private void listCommands() {
 		String output = "Yo, " + currentUser.getNick() + ", your commands are: ";
 		canAccessList = false;

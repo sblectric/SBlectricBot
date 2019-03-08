@@ -18,3 +18,5 @@ To get started, simply create a ./db folder in the working directory with the fo
 And optionally:
 
 4. mentions.txt, with each line being something the bot will say randomly when mentioned in chat
+5. weblink.txt, with the first line being `#<path to your web server directory to save HTML files>`
+				and the second line being `#<the URL corresponding to that path>`.

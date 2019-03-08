@@ -1,9 +1,15 @@
+v0.3.0
++ Added HTML writing for !commands and !memelist for website integration
++ Fixed !uptime command time unit pluralization
+
+v0.2.1
++ Added !addmeme and !delmeme to mirror existing !newmeme and !remmeme commands respectively
+
 v0.2.0
 + Added SRC integration, with default !pb and !wr commands
 + Added Twitch stream integration, with default !uptime command
 > Fixed !shoutout allowing an empty username for its parameter
-> Moved chat command classes to their own subpackage
-  instead of being subclasses
+> Moved chat command classes to their own subpackage instead of being subclasses
 
 v0.1.3
 + Added default !github command

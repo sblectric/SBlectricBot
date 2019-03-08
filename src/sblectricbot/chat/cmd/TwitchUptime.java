@@ -24,8 +24,12 @@ public class TwitchUptime implements Runnable {
 			long hours = TimeUnit.MILLISECONDS.toHours(time);
 			long minutes = TimeUnit.MILLISECONDS.toMinutes(time) - hours * 60;
 			
+			String dispHours = hours == 1 ? "hour" : "hours";
+			String dispMinutes = minutes == 1 ? "minute" : "minutes";
+			
 			Chat.sendMessage("Stream has been up for " + 
-						(hours > 0 ? hours + " hours, " : "") + minutes + " minutes.");
+						(hours > 0 ? hours + " " + dispHours + ", " : "") + 
+						minutes + " " + dispMinutes + ".");
 		
 		} catch (Exception e) {
 			Chat.sendMessage("Stream is offline.");
